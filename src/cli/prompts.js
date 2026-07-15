@@ -25,8 +25,12 @@ async function promptAddItem(rl, cart) {
         return;
     }
 
-    cartService.addItem(cart, createItem(catalogItem.name, catalogItem.price, quantity, catalogItem.icon));
-    printSuccess(`${catalogItem.name} adicionado ao carrinho.`);
+    const added = cartService.addItem(cart, createItem(catalogItem.name, catalogItem.price, quantity, catalogItem.icon));
+    if (added) {
+        printSuccess(`${catalogItem.name} adicionado ao carrinho.`);
+    } else {
+        printError('Não foi possível adicionar o item ao carrinho.');
+    }
 }
 
 async function promptDeleteItem(rl, cart) {
