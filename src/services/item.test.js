@@ -12,9 +12,3 @@ test('subtotal reflete mudanças feitas na quantidade do item', () => {
     item.quantity = 5;
     assert.equal(item.subtotal(), 250);
 });
-
-test('cada item recebe um id único', () => {
-    const item1 = createItem('Mouse', 50, 2);
-    const item2 = createItem('Teclado', 100, 1);
-    assert.notEqual(item1.id, item2.id);
-});

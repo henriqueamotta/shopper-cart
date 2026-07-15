@@ -68,12 +68,4 @@ function calculateCartTotal(userCart) {
     return userCart.reduce((total, item) => total + item.subtotal(), 0);
 }
 
-// Formatar o carrinho em linhas de texto, prontas para exibição
-function formatCart(userCart) {
-    return userCart.map(
-        (item, index) =>
-            `${index + 1}. ${item.icon} ${item.name}: $${item.price.toFixed(2)} | ${item.quantity}x = $${item.subtotal().toFixed(2)}`
-    );
-}
-
-export { addItem, deleteItem, updateItemQuantity, calculateCartTotal, formatCart };
+export { addItem, deleteItem, updateItemQuantity, calculateCartTotal };

@@ -23,13 +23,21 @@ function printCatalog() {
     });
 }
 
+// Formatar o carrinho em linhas de texto, prontas para exibição
+function formatCart(cart) {
+    return cart.map(
+        (item, index) =>
+            `${index + 1}. ${item.icon} ${item.name}: $${item.price.toFixed(2)} | ${item.quantity}x = $${item.subtotal().toFixed(2)}`
+    );
+}
+
 function printCart(cart) {
     if (cart.length === 0) {
         console.log(pc.dim('\n🛒 Carrinho vazio.'));
         return;
     }
     console.log(pc.bold('\n🛒 Itens no carrinho:'));
-    cartService.formatCart(cart).forEach((line) => console.log(line));
+    formatCart(cart).forEach((line) => console.log(line));
 }
 
 function printTotal(cart) {
@@ -57,4 +65,5 @@ export {
     printSuccess,
     printError,
     printSeparator,
+    formatCart,
 };
