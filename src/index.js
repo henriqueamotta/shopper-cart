@@ -61,6 +61,10 @@ function printError(message) {
     console.log(pc.red(`❌ ${message}`));
 }
 
+function printSeparator() {
+    console.log(pc.dim('\n' + '─'.repeat(40)));
+}
+
 async function promptAddItem() {
     printCatalog();
     const choice = Number(await rl.question('Escolha o item pelo número: '));
@@ -87,12 +91,18 @@ async function promptDeleteItem() {
         return;
     }
 
-    const name = await rl.question('Nome do item a remover: ');
-    const removed = cartService.deleteItem(cart, name.trim());
+    const index = Number(await rl.question('Número do item a remover: '));
+
+    if (Number.isNaN(index)) {
+        printError('Número inválido.');
+        return;
+    }
+
+    const removed = cartService.deleteItem(cart, index);
     if (removed) {
-        printSuccess(`${name} removido do carrinho.`);
+        printSuccess('Item removido do carrinho.');
     } else {
-        printError(`Item "${name}" não encontrado.`);
+        printError('Item não encontrado.');
     }
 }
 
@@ -148,6 +158,10 @@ async function main() {
                 break;
             default:
                 printError('Opção inválida. Escolha um número de 1 a 6.');
+        }
+
+        if (running) {
+            printSeparator();
         }
     }
 

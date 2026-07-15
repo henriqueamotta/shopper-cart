@@ -14,13 +14,12 @@ function addItem(userCart, item) {
     userCart.push(item);
 }
 
-// Deletar um item do carrinho pelo nome. Retorna true se removeu, false se não encontrou
-function deleteItem(userCart, name) {
-    const itemIndex = userCart.findIndex(
-        (item) => item.name.toLowerCase() === name.toLowerCase()
-    );
+// Deletar um item do carrinho pelo índice (1-based, voltado ao usuário)
+// Retorna true se removeu, false se o índice for inválido
+function deleteItem(userCart, index) {
+    const itemIndex = index - 1;
 
-    if (itemIndex === -1) {
+    if (itemIndex < 0 || itemIndex >= userCart.length) {
         return false;
     }
 

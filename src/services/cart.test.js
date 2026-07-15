@@ -12,20 +12,24 @@ test('addItem soma a quantidade quando o item já existe no carrinho', () => {
     assert.equal(cart[0].quantity, 3);
 });
 
-test('deleteItem remove o item pelo nome e retorna true', () => {
+test('deleteItem remove o item pelo índice (1-based) e retorna true', () => {
+    const cart = [];
+    cartService.addItem(cart, createItem('Laptop', 1500, 1));
+    cartService.addItem(cart, createItem('Mouse', 50, 1));
+
+    const removed = cartService.deleteItem(cart, 2);
+
+    assert.equal(removed, true);
+    assert.equal(cart.length, 1);
+    assert.equal(cart[0].name, 'Laptop');
+});
+
+test('deleteItem retorna false para índice fora do intervalo', () => {
     const cart = [];
     cartService.addItem(cart, createItem('Mouse', 50, 1));
 
-    const removed = cartService.deleteItem(cart, 'Mouse');
-
-    assert.equal(removed, true);
-    assert.equal(cart.length, 0);
-});
-
-test('deleteItem retorna false quando o item não existe', () => {
-    const cart = [];
-    const removed = cartService.deleteItem(cart, 'Mouse');
-    assert.equal(removed, false);
+    assert.equal(cartService.deleteItem(cart, 0), false);
+    assert.equal(cartService.deleteItem(cart, 2), false);
 });
 
 test('updateItemQuantity atualiza a quantidade do item no índice informado (1-based)', () => {
