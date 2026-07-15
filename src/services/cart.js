@@ -16,7 +16,7 @@ function toArrayIndex(userCart, index) {
 // Adicionar um item ao carrinho, somando a quantidade se já existir um item com o mesmo nome
 // Retorna true se adicionou, false se o item violar as invariantes de domínio
 function addItem(userCart, item) {
-    if (!isPositiveInteger(item.quantity) || typeof item.price !== 'number' || item.price < 0) {
+    if (!isPositiveInteger(item.quantity) || !Number.isFinite(item.price) || item.price < 0) {
         return false;
     }
 

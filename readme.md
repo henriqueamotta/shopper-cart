@@ -4,6 +4,8 @@ CLI interativo de carrinho de compras em Node.js. O carrinho armazena itens e ca
 
 ## Como rodar
 
+Requer Node.js >= 20.
+
 ```bash
 npm install
 npm start

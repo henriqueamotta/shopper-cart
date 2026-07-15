@@ -92,6 +92,14 @@ test('addItem retorna false para quantidade inválida ou preço negativo', () =>
     assert.equal(cart.length, 0);
 });
 
+test('addItem retorna false para preço NaN ou infinito', () => {
+    const cart = [];
+
+    assert.equal(cartService.addItem(cart, createItem('Mouse', NaN, 1)), false);
+    assert.equal(cartService.addItem(cart, createItem('Mouse', Infinity, 1)), false);
+    assert.equal(cart.length, 0);
+});
+
 test('calculateCartTotal soma os subtotais de todos os itens', () => {
     const cart = [];
     cartService.addItem(cart, createItem('Laptop', 1500, 1));
