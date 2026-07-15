@@ -62,6 +62,36 @@ test('updateItemQuantity retorna false para índice fora do intervalo', () => {
     assert.equal(cartService.updateItemQuantity(cart, 2, 5), false);
 });
 
+test('updateItemQuantity retorna false para quantidade negativa, zero ou fracionária', () => {
+    const cart = [];
+    cartService.addItem(cart, createItem('Laptop', 1500, 1));
+
+    assert.equal(cartService.updateItemQuantity(cart, 1, -5), false);
+    assert.equal(cartService.updateItemQuantity(cart, 1, 0), false);
+    assert.equal(cartService.updateItemQuantity(cart, 1, 1.5), false);
+    assert.equal(cart[0].quantity, 1);
+});
+
+test('deleteItem e updateItemQuantity retornam false para índice fracionário', () => {
+    const cart = [];
+    cartService.addItem(cart, createItem('Laptop', 1500, 1));
+    cartService.addItem(cart, createItem('Mouse', 50, 1));
+
+    assert.equal(cartService.deleteItem(cart, 1.5), false);
+    assert.equal(cartService.updateItemQuantity(cart, 1.5, 3), false);
+    assert.equal(cart.length, 2);
+});
+
+test('addItem retorna false para quantidade inválida ou preço negativo', () => {
+    const cart = [];
+
+    assert.equal(cartService.addItem(cart, createItem('Mouse', 50, -1)), false);
+    assert.equal(cartService.addItem(cart, createItem('Mouse', 50, 0)), false);
+    assert.equal(cartService.addItem(cart, createItem('Mouse', 50, 1.5)), false);
+    assert.equal(cartService.addItem(cart, createItem('Mouse', -10, 1)), false);
+    assert.equal(cart.length, 0);
+});
+
 test('calculateCartTotal soma os subtotais de todos os itens', () => {
     const cart = [];
     cartService.addItem(cart, createItem('Laptop', 1500, 1));
