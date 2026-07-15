@@ -1,4 +1,9 @@
-// Ações do carrinho de compras (domínio puro, sem I/O)
+// Converter um índice 1-based (voltado ao usuário) para o índice 0-based do array,
+// retornando -1 se estiver fora dos limites do carrinho
+function toArrayIndex(userCart, index) {
+    const itemIndex = index - 1;
+    return itemIndex >= 0 && itemIndex < userCart.length ? itemIndex : -1;
+}
 
 // Adicionar um item ao carrinho, somando a quantidade se já existir um item com o mesmo nome
 function addItem(userCart, item) {
@@ -17,9 +22,9 @@ function addItem(userCart, item) {
 // Deletar um item do carrinho pelo índice (1-based, voltado ao usuário)
 // Retorna true se removeu, false se o índice for inválido
 function deleteItem(userCart, index) {
-    const itemIndex = index - 1;
+    const itemIndex = toArrayIndex(userCart, index);
 
-    if (itemIndex < 0 || itemIndex >= userCart.length) {
+    if (itemIndex === -1) {
         return false;
     }
 
@@ -30,9 +35,9 @@ function deleteItem(userCart, index) {
 // Atualizar a quantidade de um item no carrinho (índice 1-based, voltado ao usuário)
 // Retorna true se atualizou, false se o índice for inválido
 function updateItemQuantity(userCart, index, newQuantity) {
-    const itemIndex = index - 1;
+    const itemIndex = toArrayIndex(userCart, index);
 
-    if (itemIndex < 0 || itemIndex >= userCart.length) {
+    if (itemIndex === -1) {
         return false;
     }
 
