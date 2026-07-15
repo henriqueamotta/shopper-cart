@@ -24,6 +24,10 @@ function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function isPositiveInteger(value) {
+    return Number.isInteger(value) && value > 0;
+}
+
 function seedRandomItems(count) {
     const shuffled = [...catalog].sort(() => Math.random() - 0.5);
     shuffled.slice(0, count).forEach((catalogItem) => {
@@ -76,8 +80,8 @@ async function promptAddItem() {
     }
 
     const quantity = Number(await rl.question('Quantidade: '));
-    if (Number.isNaN(quantity) || quantity <= 0) {
-        printError('Quantidade inválida.');
+    if (!isPositiveInteger(quantity)) {
+        printError('Quantidade inválida. Informe um número inteiro maior que zero.');
         return;
     }
 
@@ -115,8 +119,8 @@ async function promptUpdateQuantity() {
     const index = Number(await rl.question('Número do item a atualizar: '));
     const quantity = Number(await rl.question('Nova quantidade: '));
 
-    if (Number.isNaN(index) || Number.isNaN(quantity) || quantity <= 0) {
-        printError('Dados inválidos.');
+    if (Number.isNaN(index) || !isPositiveInteger(quantity)) {
+        printError('Dados inválidos. A quantidade deve ser um número inteiro maior que zero.');
         return;
     }
 
