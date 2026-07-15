@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "start": "node src/index.js",
-    "test": "node --test src/services"
+    "test": "node --test"
   },
   "keywords": [],
   "author": "",
