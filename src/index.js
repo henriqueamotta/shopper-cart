@@ -1,140 +1,16 @@
 import { createInterface } from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 import pc from 'picocolors';
-import * as cartService from './services/cart.js';
-import createItem from './services/item.js';
-import catalog from './data/catalog.js';
+import { menu, printCart, printTotal, printError, printSeparator } from './cli/display.js';
+import { promptAddItem, promptDeleteItem, promptUpdateQuantity } from './cli/prompts.js';
+import { seedRandomItems } from './cli/seed.js';
 
 const cart = [];
 const rl = createInterface({ input, output });
 
-function menu() {
-    return `
-${pc.bold(pc.cyan('🛍️  Shopping Cart CLI'))}
-${pc.blue('1.')} Adicionar item
-${pc.blue('2.')} Remover item
-${pc.blue('3.')} Atualizar quantidade de um item
-${pc.blue('4.')} Listar itens do carrinho
-${pc.blue('5.')} Calcular total do carrinho
-${pc.blue('6.')} Sair
-`;
-}
-
-function randomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function isPositiveInteger(value) {
-    return Number.isInteger(value) && value > 0;
-}
-
-function seedRandomItems(count) {
-    const shuffled = [...catalog].sort(() => Math.random() - 0.5);
-    shuffled.slice(0, count).forEach((catalogItem) => {
-        const quantity = randomInt(1, 3);
-        cartService.addItem(cart, createItem(catalogItem.name, catalogItem.price, quantity, catalogItem.icon));
-    });
-}
-
-function printCatalog() {
-    console.log(pc.bold('\n📦 Itens disponíveis:'));
-    catalog.forEach((catalogItem, index) => {
-        console.log(`${pc.blue(`${index + 1}.`)} ${catalogItem.icon} ${catalogItem.name} - ${pc.yellow(`$${catalogItem.price.toFixed(2)}`)}`);
-    });
-}
-
-function printCart() {
-    if (cart.length === 0) {
-        console.log(pc.dim('\n🛒 Carrinho vazio.'));
-        return;
-    }
-    console.log(pc.bold('\n🛒 Itens no carrinho:'));
-    cartService.formatCart(cart).forEach((line) => console.log(line));
-}
-
-function printTotal() {
-    const total = cartService.calculateCartTotal(cart);
-    console.log(pc.bold(`\n💰 Total do carrinho: ${pc.yellow(`$${total.toFixed(2)}`)}`));
-}
-
-function printSuccess(message) {
-    console.log(pc.green(`✅ ${message}`));
-}
-
-function printError(message) {
-    console.log(pc.red(`❌ ${message}`));
-}
-
-function printSeparator() {
-    console.log(pc.dim('\n' + '─'.repeat(40)));
-}
-
-async function promptAddItem() {
-    printCatalog();
-    const choice = Number(await rl.question('Escolha o item pelo número: '));
-    const catalogItem = catalog[choice - 1];
-
-    if (!catalogItem) {
-        printError('Item inválido.');
-        return;
-    }
-
-    const quantity = Number(await rl.question('Quantidade: '));
-    if (!isPositiveInteger(quantity)) {
-        printError('Quantidade inválida. Informe um número inteiro maior que zero.');
-        return;
-    }
-
-    cartService.addItem(cart, createItem(catalogItem.name, catalogItem.price, quantity, catalogItem.icon));
-    printSuccess(`${catalogItem.name} adicionado ao carrinho.`);
-}
-
-async function promptDeleteItem() {
-    printCart();
-    if (cart.length === 0) {
-        return;
-    }
-
-    const index = Number(await rl.question('Número do item a remover: '));
-
-    if (Number.isNaN(index)) {
-        printError('Número inválido.');
-        return;
-    }
-
-    const removed = cartService.deleteItem(cart, index);
-    if (removed) {
-        printSuccess('Item removido do carrinho.');
-    } else {
-        printError('Item não encontrado.');
-    }
-}
-
-async function promptUpdateQuantity() {
-    printCart();
-    if (cart.length === 0) {
-        return;
-    }
-
-    const index = Number(await rl.question('Número do item a atualizar: '));
-    const quantity = Number(await rl.question('Nova quantidade: '));
-
-    if (Number.isNaN(index) || !isPositiveInteger(quantity)) {
-        printError('Dados inválidos. A quantidade deve ser um número inteiro maior que zero.');
-        return;
-    }
-
-    const updated = cartService.updateItemQuantity(cart, index, quantity);
-    if (updated) {
-        printSuccess('Quantidade atualizada.');
-    } else {
-        printError('Item não encontrado.');
-    }
-}
-
 async function main() {
     console.log(pc.bold('Welcome to the Shopping Cart Service!'));
-    seedRandomItems(3);
+    seedRandomItems(cart, 3);
 
     let running = true;
     while (running) {
@@ -143,19 +19,19 @@ async function main() {
 
         switch (choice) {
             case '1':
-                await promptAddItem();
+                await promptAddItem(rl, cart);
                 break;
             case '2':
-                await promptDeleteItem();
+                await promptDeleteItem(rl, cart);
                 break;
             case '3':
-                await promptUpdateQuantity();
+                await promptUpdateQuantity(rl, cart);
                 break;
             case '4':
-                printCart();
+                printCart(cart);
                 break;
             case '5':
-                printTotal();
+                printTotal(cart);
                 break;
             case '6':
                 running = false;
