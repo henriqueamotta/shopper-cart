@@ -1,13 +1,17 @@
 // Casos de uso dos itens do carrinho de compras
 
+let nextId = 1;
+
 // Criar item com subtotal
-async function createItem(name, price, quantity) {
-  return {
+function createItem(name, price, quantity) {
+  const item = {
+    id: nextId++,
     name,
     price,
     quantity,
-    subtotal: () => price * quantity,
   };
+  item.subtotal = () => item.price * item.quantity;
+  return item;
 }
 
 export default createItem;
