@@ -30,7 +30,7 @@ Itens só podem ser adicionados a partir de um catálogo fixo de 9 produtos (`sr
 npm test
 ```
 
-Roda a suíte de testes (`node --test`) sobre a lógica de domínio em `src/services`.
+Roda a suíte de testes (`node --test`), cobrindo a lógica de domínio em `src/services` e a formatação de exibição em `src/cli/display.js`.
 
 ## Estrutura
 
@@ -38,14 +38,15 @@ Roda a suíte de testes (`node --test`) sobre a lógica de domínio em `src/serv
 src/
 ├── index.js            # entrypoint: loop de leitura de comandos (readline)
 ├── cli/
-│   ├── display.js       # formatação e impressão no terminal (menu, cores, mensagens)
+│   ├── display.js       # formatação e impressão no terminal (menu, cores, mensagens, formatCart)
+│   ├── display.test.js   # teste da formatação de exibição
 │   ├── prompts.js       # handlers de cada opção do menu, chamam o cartService
-│   └── seed.js           # popula o carrinho com itens aleatórios ao iniciar
+│   └── seed.js           # popula o carrinho com itens aleatórios ao iniciar (shuffle Fisher-Yates)
 ├── data/
 │   └── catalog.js        # catálogo fixo de itens disponíveis (nome, preço, ícone)
 └── services/
-    ├── item.js            # criação de itens (id, subtotal calculado a partir do próprio item)
-    ├── cart.js            # lógica pura do carrinho (sem I/O, testável isoladamente)
+    ├── item.js            # criação de itens (subtotal calculado a partir do próprio item)
+    ├── cart.js            # lógica pura do carrinho, incluindo as invariantes de domínio (sem I/O, testável isoladamente)
     └── *.test.js           # testes de domínio (node --test)
 ```
 

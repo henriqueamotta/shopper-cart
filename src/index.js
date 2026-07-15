@@ -8,6 +8,10 @@ import { seedRandomItems } from './cli/seed.js';
 const cart = [];
 const rl = createInterface({ input, output });
 
+// Sem isso, uma entrada não-interativa (stdin redirecionado) que se esgota
+// deixa a Promise de rl.question() pendente para sempre, travando o processo
+rl.on('close', () => process.exit(0));
+
 async function main() {
     console.log(pc.bold('Welcome to the Shopping Cart Service!'));
     seedRandomItems(cart, 3);
