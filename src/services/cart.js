@@ -50,7 +50,7 @@ function calculateCartTotal(userCart) {
 function formatCart(userCart) {
     return userCart.map(
         (item, index) =>
-            `${index + 1}. ${item.name}: $${item.price.toFixed(2)} | ${item.quantity}x = $${item.subtotal().toFixed(2)}`
+            `${index + 1}. ${item.icon} ${item.name}: $${item.price.toFixed(2)} | ${item.quantity}x = $${item.subtotal().toFixed(2)}`
     );
 }
 

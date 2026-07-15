@@ -68,10 +68,10 @@ test('calculateCartTotal soma os subtotais de todos os itens', () => {
 
 test('formatCart formata cada item do carrinho em uma linha legível', () => {
     const cart = [];
-    cartService.addItem(cart, createItem('Mouse', 50, 2));
+    cartService.addItem(cart, createItem('Mouse', 50, 2, '🖱️'));
 
     const lines = cartService.formatCart(cart);
 
     assert.equal(lines.length, 1);
-    assert.equal(lines[0], '1. Mouse: $50.00 | 2x = $100.00');
+    assert.equal(lines[0], '1. 🖱️ Mouse: $50.00 | 2x = $100.00');
 });
